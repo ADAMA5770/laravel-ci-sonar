@@ -17,6 +17,18 @@ pipeline {
             }
         }
 
+        stage('Prepare Laravel') {
+            steps {
+                dir('backend') {
+                    // Créer le fichier .env pour Jenkins
+                    bat 'copy .env.example .env'
+
+                    // Générer la clé Laravel (APP_KEY)
+                    bat 'php artisan key:generate'
+                }
+            }
+        }
+
         stage('Tests') {
             steps {
                 dir('backend') {
