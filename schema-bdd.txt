@@ -1,0 +1,111 @@
+erDiagram
+    utilisateurs ||--o{ documents : "crée"
+    utilisateurs ||--o{ messages : "envoie"
+    utilisateurs ||--o{ messages : "reçoit"
+    utilisateurs ||--o{ notes_documents : "note"
+    utilisateurs ||--o{ annonces_cours : "publie"
+    utilisateurs }o--|| etablissements : "appartient à"
+    utilisateurs }o--o| filieres : "étudie dans"
+    
+    documents ||--o{ notes_documents : "reçoit"
+    documents }o--|| filieres : "appartient à"
+    
+    filieres ||--o{ tutoriels_videos : "contient"
+    
+    utilisateurs ||--o{ notifications : "reçoit"
+    
+    annonces_cours }o--|| filieres : "concerne"
+    
+    utilisateurs {
+        int id PK
+        string nom
+        string prenom
+        string email UK
+        string mot_de_passe
+        string profil_photo
+        enum role "etudiant, professeur"
+        int etablissement_id FK
+        int filiere_id FK
+        string niveau "L1, L2, Seconde..."
+        datetime created_at
+    }
+    
+    etablissements {
+        int id PK
+        string nom_etablissement
+        enum type "CEM, Lycee, Universite"
+        string ville
+        text description
+    }
+    
+    filieres {
+        int id PK
+        string nom_filiere
+        text description
+    }
+    
+    documents {
+        int id PK
+        int user_id FK
+        string titre
+        text description
+        enum type_document "cours, TD, examen, corrige"
+        int filiere_id FK
+        string niveau
+        string annee
+        string fichier_url
+        int nombre_telechargements
+        datetime date_upload
+    }
+    
+    notes_documents {
+        int id PK
+        int user_id FK
+        int document_id FK
+        int note "1-5 etoiles"
+        datetime date_note
+    }
+    
+    messages {
+        int id PK
+        int expediteur_id FK
+        int destinataire_id FK
+        text contenu
+        datetime date_envoi
+        boolean vu
+    }
+    
+    conversations {
+        int id PK
+        int utilisateur1_id FK
+        int utilisateur2_id FK
+        datetime date_creation
+    }
+    
+    tutoriels_videos {
+        int id PK
+        string titre
+        text description
+        string url_video
+        int filiere_id FK
+        datetime date_publication
+    }
+    
+    annonces_cours {
+        int id PK
+        int professeur_id FK
+        string titre
+        text contenu
+        int filiere_id FK
+        string niveau
+        datetime date_publication
+    }
+    
+    notifications {
+        int id PK
+        int user_id FK
+        text contenu
+        enum type "message, document, annonce"
+        datetime date
+        boolean lu
+    }
