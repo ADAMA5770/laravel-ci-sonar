@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class NoteDocument extends Model
 {
+    protected $table = 'notes_documents';
     protected $fillable = [
         'user_id',
         'document_id',

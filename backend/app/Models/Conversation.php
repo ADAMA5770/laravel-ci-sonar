@@ -6,30 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
 {
-    protected $fillable = [
-        'utilisateur1_id',
-        'utilisateur2_id'
-    ];
-    
-    // Relations
-    public function utilisateur1()
+    protected $fillable = ['user1_id', 'user2_id'];
+
+    public function user1()
     {
-        return $this->belongsTo(User::class, 'utilisateur1_id');
+        return $this->belongsTo(User::class, 'user1_id');
     }
-    
-    public function utilisateur2()
+
+    public function user2()
     {
-        return $this->belongsTo(User::class, 'utilisateur2_id');
+        return $this->belongsTo(User::class, 'user2_id');
     }
-    
+
     public function messages()
     {
-        return $this->hasMany(Message::class, 'conversation_id');
+        return $this->hasMany(Message::class);
     }
-    
-    // Méthode helper pour récupérer le dernier message
-    public function dernierMessage()
+
+    public function lastMessage()
     {
-        return $this->messages()->latest()->first();
+        return $this->hasOne(Message::class)->latestOfMany();
     }
 }

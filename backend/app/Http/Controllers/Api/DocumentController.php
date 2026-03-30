@@ -36,6 +36,11 @@ class DocumentController extends Controller
             $query->where('annee', $request->annee);
         }
 
+        // Filtrer par utilisateur
+        if ($request->has('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
         // Recherche par titre
         if ($request->has('search')) {
             $query->where('titre', 'like', '%' . $request->search . '%');
@@ -54,8 +59,7 @@ class DocumentController extends Controller
         }
 
         // Pagination
-        $documents = $query->paginate(15);
-
+        $documents = $query->with(['user', 'filiere'])->withAvg('notes', 'note')->paginate(15);
         return response()->json($documents);
     }
 
